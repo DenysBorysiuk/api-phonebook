@@ -1,21 +1,26 @@
-const Joi = require("joi");
-const { Schema, model } = require("mongoose");
+const Joi = require('joi');
+const { Schema, model } = require('mongoose');
 
 const userSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: [true, 'Username is required'],
+      unique: true,
+    },
     password: {
       type: String,
-      required: [true, "Password is required"],
+      required: [true, 'Password is required'],
     },
     email: {
       type: String,
-      required: [true, "Email is required"],
+      required: [true, 'Email is required'],
       unique: true,
     },
     subscription: {
       type: String,
-      enum: ["starter", "pro", "business"],
-      default: "starter",
+      enum: ['starter', 'pro', 'business'],
+      default: 'starter',
     },
     token: {
       type: String,
@@ -28,25 +33,31 @@ const userSchema = new Schema(
     },
     verificationToken: {
       type: String,
-      required: [true, "Verify token is required"],
+      required: [true, 'Verify token is required'],
     },
   },
   { versionKey: false, timestamps: true }
 );
 
-const authSchema = Joi.object({
+const registerSchema = Joi.object({
+  name: Joi.string().required().min(3),
+  email: Joi.string().required().email(),
+  password: Joi.string().required().min(6),
+});
+
+const loginSchema = Joi.object({
   email: Joi.string().required().email(),
   password: Joi.string().required().min(6),
 });
 
 const subscriptionScema = Joi.object({
-  subscription: Joi.string().required().valid("starter", "pro", "business"),
+  subscription: Joi.string().required().valid('starter', 'pro', 'business'),
 });
 
 const emailSchema = Joi.object({
   email: Joi.string().required().email(),
 });
 
-const User = model("user", userSchema);
+const User = model('user', userSchema);
 
-module.exports = { User, authSchema, subscriptionScema, emailSchema };
+module.exports = { User, registerSchema, loginSchema, subscriptionScema, emailSchema };
