@@ -7,7 +7,7 @@ const contactSchema = new Schema(
       type: String,
       required: [true, 'Set name for contact'],
     },
-    phone: {
+    number: {
       type: String,
     },
     favorite: {
@@ -24,12 +24,12 @@ const contactSchema = new Schema(
 
 const addSchema = Joi.object({
   name: Joi.string().min(3).required(),
-  phone: Joi.string().min(6).required(),
+  number: Joi.string().min(6).required(),
 });
 
 const updateSchema = Joi.object({
   name: Joi.string().min(3).optional(),
-  phone: Joi.string().min(6).optional(),
+  number: Joi.string().min(6).optional(),
 })
   .required()
   .min(1);
